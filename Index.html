@@ -8,18 +8,36 @@
 </head>
 <body>
     <div class="container">
-        <h1>Math Mock Test</h1>
-        <form id="mockForm">
-            <div id="questionContainer"></div>
-            <button type="button" id="submitBtn">Submit Test</button>
-        </form>
-        <div id="result" class="hidden">
-            <h2>Results</h2>
-            <p id="attempted"></p>
-            <p id="unattempted"></p>
-            <p id="incorrect"></p>
-            <p>Check the correctness of your responses in your book.</p>
+        <h1>Mock Test Application</h1>
+        <div id="page1">
+            <h2>Insert Questions</h2>
+            <form id="questionForm">
+                <input type="text" id="questionText" placeholder="Enter Question Text"><br>
+                <input type="file" id="questionImage" accept="image/*"><br>
+                <input type="text" id="optionA" placeholder="Option A"><br>
+                <input type="text" id="optionB" placeholder="Option B"><br>
+                <input type="text" id="optionC" placeholder="Option C"><br>
+                <input type="text" id="optionD" placeholder="Option D"><br>
+                <button type="button" onclick="saveQuestion()">Save Question</button>
+            </form>
         </div>
+
+        <div id="page2" class="hidden">
+            <h2>Mock Test</h2>
+            <form id="mockTestForm">
+                <div id="testQuestions"></div>
+                <button type="button" onclick="submitTest()">Submit Test</button>
+            </form>
+        </div>
+
+        <div id="page3" class="hidden">
+            <h2>Results</h2>
+            <div id="results"></div>
+        </div>
+
+        <button onclick="showPage(1)">Insert Questions</button>
+        <button onclick="showPage(2)">Start Mock Test</button>
+        <button onclick="showPage(3)">Show Results</button>
     </div>
     <script src="script.js"></script>
 </body>
