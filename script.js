@@ -1,77 +1,92 @@
-// Question Data (Modify this with your own questions)
-const questions = [
-    {
-        question: "What is 5 + 3?",
-        options: ["6", "7", "8", "9"],
-    },
-    {
-        question: "What is 12 - 4?",
-        options: ["7", "8", "9", "10"],
-    },
-    {
-        question: "What is 3 x 3?",
-        options: ["6", "7", "8", "9"],
-    },
-    // Add more questions as needed
-];
+let questions = [];
 
-// Initialize form
-const questionContainer = document.getElementById("questionContainer");
-const mockForm = document.getElementById("mockForm");
-const submitBtn = document.getElementById("submitBtn");
-const result = document.getElementById("result");
-const attemptedEl = document.getElementById("attempted");
-const unattemptedEl = document.getElementById("unattempted");
-const incorrectEl = document.getElementById("incorrect");
+function showPage(pageNum) {
+    document.getElementById('page1').classList.add('hidden');
+    document.getElementById('page2').classList.add('hidden');
+    document.getElementById('page3').classList.add('hidden');
+    
+    if (pageNum === 1) {
+        document.getElementById('page1').classList.remove('hidden');
+    } else if (pageNum === 2) {
+        document.getElementById('page2').classList.remove('hidden');
+        loadMockTest();
+    } else if (pageNum === 3) {
+        document.getElementById('page3').classList.remove('hidden');
+        showResults();
+    }
+}
 
-// Render Questions
-questions.forEach((q, index) => {
-    const questionDiv = document.createElement("div");
-    questionDiv.classList.add("question");
+function saveQuestion() {
+    let questionText = document.getElementById('questionText').value;
+    let questionImage = document.getElementById('questionImage').files[0];
+    let optionA = document.getElementById('optionA').value;
+    let optionB = document.getElementById('optionB').value;
+    let optionC = document.getElementById('optionC').value;
+    let optionD = document.getElementById('optionD').value;
 
-    const questionText = document.createElement("p");
-    questionText.textContent = `${index + 1}. ${q.question}`;
-    questionDiv.appendChild(questionText);
+    let question = {
+        text: questionText,
+        image: questionImage ? URL.createObjectURL(questionImage) : null,
+        options: [optionA, optionB, optionC, optionD],
+        answer: null // Answer is initially not set
+    };
 
-    const optionsDiv = document.createElement("div");
-    optionsDiv.classList.add("options");
+    questions.push(question);
+    alert("Question saved!");
+}
 
-    q.options.forEach((option, i) => {
-        const label = document.createElement("label");
-        const input = document.createElement("input");
-        input.type = "radio";
-        input.name = `question${index}`;
-        input.value = option;
-        label.appendChild(input);
-        label.append(option);
-        optionsDiv.appendChild(label);
-    });
+function loadMockTest() {
+    let testContainer = document.getElementById('testQuestions');
+    testContainer.innerHTML = '';
 
-    questionDiv.appendChild(optionsDiv);
-    questionContainer.appendChild(questionDiv);
-});
-
-// Handle Submission
-submitBtn.addEventListener("click", () => {
-    let attempted = 0;
-    let unattempted = 0;
-    let incorrect = 0;
-
-    questions.forEach((_, index) => {
-        const selectedOption = document.querySelector(
-            `input[name="question${index}"]:checked`
-        );
-
-        if (selectedOption) {
-            attempted++;
+    questions.forEach((question, index) => {
+        let questionDiv = document.createElement('div');
+        
+        let questionContent = document.createElement('div');
+        if (question.image) {
+            let img = document.createElement('img');
+            img.src = question.image;
+            questionContent.appendChild(img);
         } else {
-            unattempted++;
+            questionContent.textContent = question.text;
+        }
+        
+        questionDiv.appendChild(questionContent);
+        
+        let optionsDiv = document.createElement('div');
+        question.options.forEach((option, i) => {
+            let label = document.createElement('label');
+            let input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'question' + index;
+            input.value = option;
+            label.appendChild(input);
+            label.append(option);
+            optionsDiv.appendChild(label);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        testContainer.appendChild(questionDiv);
+    });
+}
+
+function submitTest() {
+    questions.forEach((question, index) => {
+        let selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selectedOption) {
+            question.answer = selectedOption.value;
         }
     });
+    showPage(3);
+}
 
-    attemptedEl.textContent = `Attempted: ${attempted}`;
-    unattemptedEl.textContent = `Unattempted: ${unattempted}`;
-    incorrectEl.textContent = `Incorrect answers are based on your check in the book.`;
+function showResults() {
+    let resultContainer = document.getElementById('results');
+    resultContainer.innerHTML = '';
 
-    result.classList.remove("hidden");
-});
+    questions.forEach((question, index) => {
+        let resultText = document.createElement('div');
+        resultText.textContent = `Q${index + 1}: ${question.text} - Your answer: ${question.answer || 'Not Attempted'}`;
+        resultContainer.appendChild(resultText);
+    });
+}
