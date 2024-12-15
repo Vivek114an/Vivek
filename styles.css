@@ -15,26 +15,18 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
 }
 
-form {
-    margin-top: 20px;
-}
-
-.question {
-    margin-bottom: 20px;
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
+input {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
 }
 
 button {
-    display: block;
-    margin: 20px auto;
     padding: 10px 20px;
     background: #007bff;
     color: white;
@@ -51,11 +43,10 @@ button:hover {
     display: none;
 }
 
-#result {
-    text-align: center;
+#testQuestions {
     margin-top: 20px;
 }
 
-#result p {
-    margin: 10px 0;
+#testQuestions div {
+    margin-bottom: 10px;
 }
